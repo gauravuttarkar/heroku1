@@ -8,4 +8,5 @@ commands_by_invoke_name = {
     "getitem": get_item,
     "updateitem": update_item,
     "deleteitem": delete_item,
+    "createvm": create_vm,
 }

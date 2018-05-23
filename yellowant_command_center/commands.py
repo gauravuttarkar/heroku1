@@ -25,6 +25,36 @@ def create_item(args, user_integration, message=None):
     return message
 
 
+# def create_vm():
+#     VM_PARAMETERS = {
+#         'location': 'West US',
+#         'os_profile': {
+#             'computer_name': 'FirstMachine',
+#             'admin_username': 'USERNAME',
+#             'admin_password': 'PASSWORD'
+#         },
+#         'hardware_profile': {
+#             'vm_size': 'Standard_DS1_v2'
+#         },
+#         'storage_profile': {
+#             'image_reference': {
+#                 'publisher': 'Canonical',
+#                 'offer': 'UbuntuServer',
+#                 'sku': '16.04.0-LTS',
+#                 'version': 'latest'
+#             },
+#         },
+#         'network_profile': {
+#             'network_interfaces': [{
+#                 'id': 'NIC_ID',
+#             }]
+#         },
+#     }
+#
+#     def create_vm()
+#         compute_client.virtual_machines.create_or_update(
+#             'RESOURCE_GROUP_NAME', 'VM_NAME', VM_PARAMETERS)
+
 def get_list(args, user_integration, message=None):
     message = message or MessageClass()
 

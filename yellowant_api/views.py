@@ -10,13 +10,22 @@ from .models import YellowAntRedirectState, UserIntegration
 from yellowant_command_center.command_center import CommandCenter
 
 
+# def redirectToAuthenticationPage(request):
+#     HttpResponseRedirect("https://www.yellowant.com/api/oauth2/authorize/?client_id=%s&response_type=code&redirect_url=https://replace/yellowant-oauth-redirect/")
+#
+#
+# def yellowantRedirectUrl(request):
+#
+# #ORIGINAL CODE
+
+
 def request_yellowant_oauth_code(request):
     """Initiate the creation of a new user integration on YA
-    
-    YA uses oauth2 as its authorization framework. This method requests for an oauth2 code from YA to start creating a 
+
+    YA uses oauth2 as its authorization framework. This method requests for an oauth2 code from YA to start creating a
     new user integration for this application on YA.
     """
-    # get the user requesting to create a new YA integration 
+    # get the user requesting to create a new YA integration
     user = User.objects.get(id=request.user.id)
 
     # generate a unique ID to identify the user when YA returns an oauth2 code
@@ -33,9 +42,9 @@ def request_yellowant_oauth_code(request):
 
 def yellowant_oauth_redirect(request):
     """Receive the oauth2 code from YA to generate a new user integration
-    
+
     This method calls utilizes the YA Python SDK to create a new user integration on YA.
-    This method only provides the code for creating a new user integration on YA. Beyond that, you might need to 
+    This method only provides the code for creating a new user integration on YA. Beyond that, you might need to
     authenticate the user on the actual application (whose APIs this application will be calling) and store a relation
     between these user auth details and the YA user integration.
     """
@@ -74,10 +83,10 @@ def yellowant_oauth_redirect(request):
         yellowant_integration_id=user_integration["user_application"],
         yellowant_integration_invoke_name=user_integration["user_invoke_name"],
         yellowant_integration_token=access_token)
-    
-    # A new YA user integration has been created and the details have been successfully saved in your application's 
-    # database. However, we have only created an integration on YA. As a developer, you need to begin an authentication 
-    # process for the actual application, whose API this application is connecting to. Once, the authentication process 
+
+    # A new YA user integration has been created and the details have been successfully saved in your application's
+    # database. However, we have only created an integration on YA. As a developer, you need to begin an authentication
+    # process for the actual application, whose API this application is connecting to. Once, the authentication process
     # for the actual application is completed with the user, you need to create a db entry which relates the YA user
     # integration, we just created, with the actual application authentication details of the user. This application
     # will then be able to identify the actual application accounts corresponding to each YA user integration.
@@ -94,7 +103,7 @@ def yellowant_api(request):
     # verify whether the request is genuinely from YA with the help of the verification token
     if data["verification_token"] != settings.YA_VERIFICATION_TOKEN:
         return HttpResponseNotAllowed("Insufficient permissions.")
-    
+
     # check whether the request is a user command, or a webhook subscription notice from YA
     if data["event_type"] == "command":
         # request is a user command

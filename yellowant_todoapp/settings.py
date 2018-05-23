@@ -20,17 +20,17 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 YA_OAUTH_URL = "https://www.yellowant.com/api/oauth2/authorize/"
 # URL to receive oauth2 codes from YA for user authentication. As a developer, you need to provide this URL in the YA
 # developer console so that YA knows exactly where to send the oauth2 codes.
-YA_REDIRECT_URL = "http://localhost:8000/yellowant-oauth-redirect/"
+YA_REDIRECT_URL = "http://5a7e68af.ngrok.io/yellowant-oauth-redirect/"
 
 # Numerical ID generated when you register your application through the YA developer console
-YA_APP_ID = os.environ.get("YA_APP_ID", 198)
+YA_APP_ID = os.environ.get("YA_APP_ID", 1811)
 # Client ID generated from the YA developer console. Required to identify requests from this application to YA
-YA_CLIENT_ID = os.environ.get("YA_CLIENT_ID", "D50pwTXon9VSvMFnwVkUrY0qZBHICuuByr43CEAK")
+YA_CLIENT_ID = os.environ.get("YA_CLIENT_ID", "TxRmOQKutIxNm7hyqTS7IXkQWnqVfxpPffFjJfds")
 # Client secret generated from the YA developer console. Required to identify requests from this application to YA
-YA_CLIENT_SECRET = os.environ.get("YA_CLIENT_SECRET", "61VCXlM2F3nEqbKisDvT4coh7zZyXr8gR3Mwd4GY5CwWr0wvNEdNp3pr5CskxDdVrwjx08K6JHXnOaLeMnfJnS4buQMYmTrMY2U98MMAgVfaP12gb3BdVcMTnEosntzT")
+YA_CLIENT_SECRET = os.environ.get("YA_CLIENT_SECRET", "6alFGTuLyqnakx7NkYNCA3gtbW5NrRnFqJOYSH9LuJjcsUW18X0Wm1VCKqVbJaZ9VKjHodJI009KgayMs9HugKFElRefYeR5EfWK6peIZPZ2VGmGMhVDU6Ucl1PNVF0e")
 # Verification token generated from the YA developer console. This application can verify requests from YA as they will
 # carry the verification token
-YA_VERIFICATION_TOKEN = os.environ.get("YA_VERIFICATION_TOKEN", "FLvwvIvxhauF4t3Hme0rTEWiSbmqWIdinleYJYL8rYqxVfeevDckGQkF4F5wJuObIAHBhWlz2UDTdpgP6GalcMTNjDmIC02y8HQ3T6gKwQZuT2qFk6kgkk69ASxgkNd0")
+YA_VERIFICATION_TOKEN = os.environ.get("YA_VERIFICATION_TOKEN", "6G8FMSWWDq8dsAPy2zSd6fhsDOWUUiP7IDY3LPc2g25OTUGi2gplh3P0x62L2ix1eMPCXAxjzwonxwakipddY0MK7b0auQvN7bmOZ8iLio1IfmjbK94Fwrx5PgMWhwaz")
 
 ### END YellowAnt specific settings ###
 
