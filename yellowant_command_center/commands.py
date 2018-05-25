@@ -22,6 +22,67 @@ from msrestazure.azure_exceptions import CloudError
 from haikunator import Haikunator
 # def create_vm(args,user_integration,message=None):
 
+class CreateVMThread(Thread):
+    def __init__(self,args,user_integration):
+        ''' Constructor. '''
+        Thread.__init__(self)
+        self.args = args
+        self.user_integration = user_integration
+
+
+
+    def run(self):
+        global GROUP_NAME, VM_NAME, USERNAME, PASSWORD
+
+        message = MessageClass()
+        credentials, subscription_id = get_credentials()
+        compute_client = ComputeManagementClient(credentials, subscription_id)
+        network_client = NetworkManagementClient(credentials, subscription_id)
+        GROUP_NAME = self.args.get("Resource-Group")
+        VM_NAME = self.args.get("VM-Name")
+        NIC_NAME = self.args.get("nic_name")
+        IP_CONFIG_NAME = self.args.get("ipconfig_name")
+        USERNAME = self.args.get("username")
+        PASSWORD = self.args.get("password")
+        VNET_NAME = self.args.get("vnet_name")
+        SUBNET_NAME =self.args.get("subnet_name")
+
+        try:
+            # Create a NIC
+            nic = create_nic(network_client, VNET_NAME, SUBNET_NAME, IP_CONFIG_NAME, NIC_NAME)
+
+            #############
+            # VM Sample #
+            #############
+
+            # Create Linux VM
+            print('\nCreating Linux Virtual Machine')
+            vm_parameters = create_vm_parameters(nic.id, VM_REFERENCE['linux'], VM_NAME, USERNAME, PASSWORD)
+            async_vm_creation = compute_client.virtual_machines.create_or_update(
+                GROUP_NAME, VM_NAME, vm_parameters)
+            # async_vm_creation.wait()
+            message.message_text = "You are Virtual Machine is being created"
+
+        except CloudError:
+            print('A VM operation failed:', traceback.format_exc(), sep='\n')
+            message.message_text = "There was an error.Please try again"
+
+        else:
+            webhook_message = MessageClass()
+            webhook_message.message_text = "VM created successfully"
+            attachment = MessageAttachmentsClass()
+            attachment.title = VM_NAME
+
+            webhook_message.attach(attachment)
+            yellowant_user_integration_object = YellowAnt(access_token=self.user_integration.yellowant_integration_token)
+            yellowant_user_integration_object.create_webhook_message(
+                requester_application=self.user_integration.yellowant_integration_id,
+                webhook_name="start_vm_webhook",
+                **webhook_message.get_dict())
+            print('All example operations completed successfully!')
+
+
+
 class StartVMThread(Thread):
     def __init__(self,c_c,G_NAME,V_NAME,user_int):
         ''' Constructor. '''
@@ -35,7 +96,7 @@ class StartVMThread(Thread):
     def run(self):
         print('Before waiting')
         async_vm_start = self.compute_client.virtual_machines.start(self.GROUP_NAME, self.VM_NAME)
-        async_vm_start.wait()
+        #async_vm_start.wait()
         print("after waiting")
 
 
@@ -64,7 +125,7 @@ class StopVMThread(Thread):
     def run(self):
         print('Before waiting')
         async_vm_stop = self.compute_client.virtual_machines.power_off(self.GROUP_NAME, self.VM_NAME)
-        async_vm_stop.wait()
+        #async_vm_stop.wait()
         print("after waiting")
         webhook_message = MessageClass()
         webhook_message.message_text = "VM stopped successfully"
@@ -179,54 +240,63 @@ def delete_resource_group(args,user_integration):
     GROUP_NAME = args.get("Resource-Group")
     print('\nDelete Resource Group')
     delete_async_operation = resource_client.resource_groups.delete(GROUP_NAME)
-    delete_async_operation.wait()
+    #delete_async_operation.wait()
     print("Resource group has been deleted")
     message.message_text = "Your resource group has been deleted"
     return message
 
 
 def create_vm(args,user_integration):
-    global GROUP_NAME,VM_NAME,USERNAME,PASSWORD
-
-    message = MessageClass()
-    credentials, subscription_id = get_credentials()
-    compute_client = ComputeManagementClient(credentials, subscription_id)
-    network_client = NetworkManagementClient(credentials, subscription_id)
-    GROUP_NAME = args.get("Resource-Group")
-    VM_NAME = args.get("VM-Name")
-    NIC_NAME = args.get("nic_name")
-    IP_CONFIG_NAME = args.get("ipconfig_name")
-    USERNAME = args.get("username")
-    PASSWORD = args.get("password")
-    VNET_NAME = args.get("vnet_name")
-    SUBNET_NAME = args.get("subnet_name")
-
-
-
-    try:
-        # Create a NIC
-        nic = create_nic(network_client,VNET_NAME,SUBNET_NAME,IP_CONFIG_NAME,NIC_NAME)
-
-        #############
-        # VM Sample #
-        #############
-
-        # Create Linux VM
-        print('\nCreating Linux Virtual Machine')
-        vm_parameters = create_vm_parameters(nic.id, VM_REFERENCE['linux'],VM_NAME,USERNAME,PASSWORD)
-        async_vm_creation = compute_client.virtual_machines.create_or_update(
-            GROUP_NAME, VM_NAME, vm_parameters)
-        #async_vm_creation.wait()
-        message.message_text = "You are Virtual Machine is being created"
-
-    except CloudError:
-        print('A VM operation failed:', traceback.format_exc(), sep='\n')
-        message.message_text = "There was an error.Please try again"
-
-    else:
-        print('All example operations completed successfully!')
-
+    threadObj = CreateVMThread(args,user_integration)
+    # async_vm_start = compute_client.virtual_machines.start(GROUP_NAME, VM_NAME)
+    # async_vm_start.wait()
+    threadObj.daemon = True
+    threadObj.start()
+    message=MessageClass()
+    message.message_text = "Creating VM"
     return message
+
+    # global GROUP_NAME,VM_NAME,USERNAME,PASSWORD
+    #
+    # message = MessageClass()
+    # credentials, subscription_id = get_credentials()
+    # compute_client = ComputeManagementClient(credentials, subscription_id)
+    # network_client = NetworkManagementClient(credentials, subscription_id)
+    # GROUP_NAME = args.get("Resource-Group")
+    # VM_NAME = args.get("VM-Name")
+    # NIC_NAME = args.get("nic_name")
+    # IP_CONFIG_NAME = args.get("ipconfig_name")
+    # USERNAME = args.get("username")
+    # PASSWORD = args.get("password")
+    # VNET_NAME = args.get("vnet_name")
+    # SUBNET_NAME = args.get("subnet_name")
+    #
+    #
+    #
+    # try:
+    #     # Create a NIC
+    #     nic = create_nic(network_client,VNET_NAME,SUBNET_NAME,IP_CONFIG_NAME,NIC_NAME)
+    #
+    #     #############
+    #     # VM Sample #
+    #     #############
+    #
+    #     # Create Linux VM
+    #     print('\nCreating Linux Virtual Machine')
+    #     vm_parameters = create_vm_parameters(nic.id, VM_REFERENCE['linux'],VM_NAME,USERNAME,PASSWORD)
+    #     async_vm_creation = compute_client.virtual_machines.create_or_update(
+    #         GROUP_NAME, VM_NAME, vm_parameters)
+    #     #async_vm_creation.wait()
+    #     message.message_text = "You are Virtual Machine is being created"
+    #
+    # except CloudError:
+    #     print('A VM operation failed:', traceback.format_exc(), sep='\n')
+    #     message.message_text = "There was an error.Please try again"
+    #
+    # else:
+    #     print('All example operations completed successfully!')
+    #
+    # return message
 
 def delete_vm(args,user_integration):
     message = MessageClass()
@@ -257,13 +327,15 @@ def start_vm(args , user_integration):
     compute_client = ComputeManagementClient(credentials, subscription_id)
     # Start the VM
     print('\nStart VM')
-    threadObj = StartVMThread(compute_client,GROUP_NAME,VM_NAME,user_integration)
-    # async_vm_start = compute_client.virtual_machines.start(GROUP_NAME, VM_NAME)
-    # async_vm_start.wait()
-    threadObj.daemon = True
-    threadObj.start()
+    # threadObj = StartVMThread(compute_client,GROUP_NAME,VM_NAME,user_integration)
+    # # async_vm_start = compute_client.virtual_machines.start(GROUP_NAME, VM_NAME)
+    # # async_vm_start.wait()
+    # threadObj.daemon = True
+    # threadObj.start()
+    async_vm_start = compute_client.virtual_machines.start(GROUP_NAME, VM_NAME)
 
-    message.message_text = "VM started"
+
+    message.message_text = VM_NAME + " started"
 
     return message
 
@@ -275,12 +347,13 @@ def stop_vm(args , user_integration):
     compute_client = ComputeManagementClient(credentials, subscription_id)
 
     print('\nStop VM')
-    threadObj = StopVMThread(compute_client, GROUP_NAME, VM_NAME,user_integration)
-    # async_vm_stop = compute_client.virtual_machines.power_off(GROUP_NAME, VM_NAME)
-    # async_vm_stop.wait()
-    threadObj.daemon = True
-    threadObj.start()
-    message.message_text = "VM stopped"
+    # threadObj = StopVMThread(compute_client, GROUP_NAME, VM_NAME,user_integration)
+    # # async_vm_stop = compute_client.virtual_machines.power_off(GROUP_NAME, VM_NAME)
+    # # async_vm_stop.wait()
+    # threadObj.daemon = True
+    # threadObj.start()
+    async_vm_stop = compute_client.virtual_machines.power_off(GROUP_NAME, VM_NAME)
+    message.message_text =  VM_NAME + " stopped"
 
     return message
 
@@ -291,13 +364,13 @@ def restart_vm(args , user_integration):
     credentials, subscription_id = get_credentials()
     compute_client = ComputeManagementClient(credentials, subscription_id)
     # Restart the VM
-    threadObj = RestartVMThread(compute_client, GROUP_NAME, VM_NAME,user_integration)
-    threadObj.daemon = True
-    threadObj.start()
+    # threadObj = RestartVMThread(compute_client, GROUP_NAME, VM_NAME,user_integration)
+    # threadObj.daemon = True
+    # threadObj.start()
     print('\nRestart VM')
-    # async_vm_restart = compute_client.virtual_machines.restart(GROUP_NAME, VM_NAME)
+    async_vm_restart = compute_client.virtual_machines.restart(GROUP_NAME, VM_NAME)
     # async_vm_restart.wait()
-    message.message_text = "VM Restarted"
+    message.message_text = VM_NAME + " Restarted"
 
     return message
 
@@ -353,7 +426,7 @@ def create_disk(args , user_integration):
             }
         }
     )
-
+    #async_disk_creation.wait()
     message.message_text = "Disk created"
 
     return message
@@ -395,7 +468,7 @@ def attach_disk(args , user_integration):
     virtual_machine.name,
     virtual_machine
     )
-    async_disk_attach.wait()
+    #async_disk_attach.wait()
     message.message_text = "Disk attached to VM"
 
     return message
