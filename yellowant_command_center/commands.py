@@ -207,10 +207,13 @@ def list_all_vms(args , user_integration):
     message = MessageClass()
     credentials, subscription_id = get_credentials()
     compute_client = ComputeManagementClient(credentials, subscription_id)
+    print('Integration ID is',user_integration)
     print('\nList VMs in subscription')
+    message.message_text = "Listing all VMs"
     for vm in compute_client.virtual_machines.list_all():
         print("\tVM: {}".format(vm.name))
-    message.message_text = "Listing all VMs"
+        message.message_text = message.message_text + "\n" + vm.name
+
 
     return message
 
@@ -220,9 +223,13 @@ def list_all_vms_in_rg(args,user_integration):
     credentials, subscription_id = get_credentials()
     compute_client = ComputeManagementClient(credentials, subscription_id)
     print('\nList VMs in resource group')
+    message.message_text = "Listing all VMs"
     for vm in compute_client.virtual_machines.list(GROUP_NAME):
         print("\tVM: {}".format(vm.name))
-    message.message_text = "Listing all VMs"
+        message.message_text=message.message_text+"\n"+vm.name
+
+
+
 
     return message
 
