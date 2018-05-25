@@ -1,7 +1,8 @@
 """Code which actually takes care of application API calls or other business logic"""
-from yellowant.messageformat import MessageClass
+from yellowant.messageformat import MessageClass, MessageAttachmentsClass, MessageButtonsClass, AttachmentFieldsClass
 from azure.mgmt.resource import ResourceManagementClient
 from todo.sdk import TodoSDK
+from yellowant import YellowAnt
 from yellowant_message_builder.messages import items_message, item_message
 from azure.mgmt.authorization import AuthorizationManagementClient
 from azure.common.credentials import UserPassCredentials
@@ -9,6 +10,7 @@ from azure.common.credentials import UserPassCredentials
 import os
 import traceback
 
+from threading import Thread
 from azure.common.credentials import ServicePrincipalCredentials
 from azure.mgmt.resource import ResourceManagementClient
 from azure.mgmt.network import NetworkManagementClient
@@ -19,6 +21,93 @@ from msrestazure.azure_exceptions import CloudError
 
 from haikunator import Haikunator
 # def create_vm(args,user_integration,message=None):
+
+class StartVMThread(Thread):
+    def __init__(self,c_c,G_NAME,V_NAME,user_int):
+        ''' Constructor. '''
+        Thread.__init__(self)
+        self.compute_client = c_c
+        self.VM_NAME = V_NAME
+        self.GROUP_NAME = G_NAME
+        self.userint=user_int
+
+
+    def run(self):
+        print('Before waiting')
+        async_vm_start = self.compute_client.virtual_machines.start(self.GROUP_NAME, self.VM_NAME)
+        async_vm_start.wait()
+        print("after waiting")
+
+
+
+        webhook_message = MessageClass()
+        webhook_message.message_text = "VM started successfully"
+        attachment = MessageAttachmentsClass()
+        attachment.title = self.VM_NAME
+
+        webhook_message.attach(attachment)
+        yellowant_user_integration_object = YellowAnt(access_token=self.userint.yellowant_integration_token)
+        yellowant_user_integration_object.create_webhook_message(requester_application=self.userint.yellowant_integration_id,webhook_name="start_vm_webhook",**webhook_message.get_dict())
+
+
+
+class StopVMThread(Thread):
+    def __init__(self,c_c,G_NAME,V_NAME,user_int):
+        ''' Constructor. '''
+        Thread.__init__(self)
+        self.compute_client = c_c
+        self.VM_NAME = V_NAME
+        self.GROUP_NAME = G_NAME
+        self.userint = user_int
+
+
+    def run(self):
+        print('Before waiting')
+        async_vm_stop = self.compute_client.virtual_machines.power_off(self.GROUP_NAME, self.VM_NAME)
+        async_vm_stop.wait()
+        print("after waiting")
+        webhook_message = MessageClass()
+        webhook_message.message_text = "VM stopped successfully"
+        attachment = MessageAttachmentsClass()
+        attachment.title = self.VM_NAME
+
+        webhook_message.attach(attachment)
+        yellowant_user_integration_object = YellowAnt(access_token=self.userint.yellowant_integration_token)
+        yellowant_user_integration_object.create_webhook_message(requester_application=self.userint.yellowant_integration_id,
+                                                                 webhook_name="start_vm_webhook",
+                                                                 **webhook_message.get_dict())
+
+
+class RestartVMThread(Thread):
+    def __init__(self,c_c,G_NAME,V_NAME,user_int):
+        ''' Constructor. '''
+        Thread.__init__(self)
+        self.compute_client = c_c
+        self.VM_NAME = V_NAME
+        self.GROUP_NAME = G_NAME
+        self.userint=user_int
+
+
+    def run(self):
+        print('Before waiting')
+        async_vm_restart = self.compute_client.virtual_machines.restart(self.GROUP_NAME, self.VM_NAME)
+        async_vm_restart.wait()
+        webhook_message = MessageClass()
+        webhook_message.message_text = "VM restarted successfully"
+        attachment = MessageAttachmentsClass()
+        attachment.title = self.VM_NAME
+
+        webhook_message.attach(attachment)
+        yellowant_user_integration_object = YellowAnt(access_token=self.userint.yellowant_integration_token)
+        yellowant_user_integration_object.create_webhook_message(requester_application=self.userint.yellowant_integration_id,
+                                                                 webhook_name="start_vm_webhook",
+                                                                 **webhook_message.get_dict())
+
+
+
+        print("after waiting")
+
+
 
 haikunator = Haikunator()
 LOCATION = 'westus'
@@ -168,8 +257,11 @@ def start_vm(args , user_integration):
     compute_client = ComputeManagementClient(credentials, subscription_id)
     # Start the VM
     print('\nStart VM')
-    async_vm_start = compute_client.virtual_machines.start(GROUP_NAME, VM_NAME)
-    async_vm_start.wait()
+    threadObj = StartVMThread(compute_client,GROUP_NAME,VM_NAME,user_integration)
+    # async_vm_start = compute_client.virtual_machines.start(GROUP_NAME, VM_NAME)
+    # async_vm_start.wait()
+    threadObj.daemon = True
+    threadObj.start()
 
     message.message_text = "VM started"
 
@@ -183,8 +275,11 @@ def stop_vm(args , user_integration):
     compute_client = ComputeManagementClient(credentials, subscription_id)
 
     print('\nStop VM')
-    async_vm_stop = compute_client.virtual_machines.power_off(GROUP_NAME, VM_NAME)
-    async_vm_stop.wait()
+    threadObj = StopVMThread(compute_client, GROUP_NAME, VM_NAME,user_integration)
+    # async_vm_stop = compute_client.virtual_machines.power_off(GROUP_NAME, VM_NAME)
+    # async_vm_stop.wait()
+    threadObj.daemon = True
+    threadObj.start()
     message.message_text = "VM stopped"
 
     return message
@@ -196,9 +291,12 @@ def restart_vm(args , user_integration):
     credentials, subscription_id = get_credentials()
     compute_client = ComputeManagementClient(credentials, subscription_id)
     # Restart the VM
+    threadObj = RestartVMThread(compute_client, GROUP_NAME, VM_NAME,user_integration)
+    threadObj.daemon = True
+    threadObj.start()
     print('\nRestart VM')
-    async_vm_restart = compute_client.virtual_machines.restart(GROUP_NAME, VM_NAME)
-    async_vm_restart.wait()
+    # async_vm_restart = compute_client.virtual_machines.restart(GROUP_NAME, VM_NAME)
+    # async_vm_restart.wait()
     message.message_text = "VM Restarted"
 
     return message
@@ -207,7 +305,7 @@ def list_all_vms(args , user_integration):
     message = MessageClass()
     credentials, subscription_id = get_credentials()
     compute_client = ComputeManagementClient(credentials, subscription_id)
-    print('Integration ID is',user_integration)
+    print('Integration ID is',user_integration.yellowant_integration_token)
     print('\nList VMs in subscription')
     message.message_text = "Listing all VMs"
     for vm in compute_client.virtual_machines.list_all():

@@ -34,6 +34,8 @@ class UserIntegration(models.Model):
     yellowant_integration_id = models.IntegerField(unique=True, null=False)
     yellowant_integration_invoke_name = models.CharField(max_length=256, null=False)
     yellowant_integration_token = models.CharField(max_length=2048, null=False)
+    #webhook_id = models.CharField(max_length=100, default="")
+    # webhook_last_updated = models.DateTimeField(default=datetime.datetime.utcnow)
 
 
 class YellowAntRedirectState(models.Model):
