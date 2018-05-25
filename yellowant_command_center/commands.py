@@ -97,16 +97,26 @@ def delete_resource_group(args,user_integration):
 
 
 def create_vm(args,user_integration):
-    global GROUP_NAME,VM_NAME
+    global GROUP_NAME,VM_NAME,USERNAME,PASSWORD
+
     message = MessageClass()
     credentials, subscription_id = get_credentials()
     compute_client = ComputeManagementClient(credentials, subscription_id)
     network_client = NetworkManagementClient(credentials, subscription_id)
     GROUP_NAME = args.get("Resource-Group")
     VM_NAME = args.get("VM-Name")
+    NIC_NAME = args.get("nic_name")
+    IP_CONFIG_NAME = args.get("ipconfig_name")
+    USERNAME = args.get("username")
+    PASSWORD = args.get("password")
+    VNET_NAME = args.get("vnet_name")
+    SUBNET_NAME = args.get("subnet_name")
+
+
+
     try:
         # Create a NIC
-        nic = create_nic(network_client)
+        nic = create_nic(network_client,VNET_NAME,SUBNET_NAME,IP_CONFIG_NAME,NIC_NAME)
 
         #############
         # VM Sample #
@@ -114,7 +124,7 @@ def create_vm(args,user_integration):
 
         # Create Linux VM
         print('\nCreating Linux Virtual Machine')
-        vm_parameters = create_vm_parameters(nic.id, VM_REFERENCE['linux'])
+        vm_parameters = create_vm_parameters(nic.id, VM_REFERENCE['linux'],VM_NAME,USERNAME,PASSWORD)
         async_vm_creation = compute_client.virtual_machines.create_or_update(
             GROUP_NAME, VM_NAME, vm_parameters)
         #async_vm_creation.wait()
@@ -314,11 +324,11 @@ def detach_disk(args,user_integration):
 
 #=======================================================================================================================
 
-def create_nic(network_client):
+def create_nic(network_client,VNET_NAME,SUBNET_NAME,IP_CONFIG_NAME,NIC_NAME):
     """Create a Network Interface for a VM.
     """
     # Create VNet
-    global GROUP_NAME,VNET_NAME
+    global GROUP_NAME
     print('\nCreate Vnet')
     async_vnet_creation = network_client.virtual_networks.create_or_update(
         GROUP_NAME,
@@ -359,10 +369,10 @@ def create_nic(network_client):
     )
     return async_nic_creation.result()
 
-def create_vm_parameters(nic_id, vm_reference):
+def create_vm_parameters(nic_id, vm_reference,VM_NAME,USERNAME,PASSWORD):
     """Create the VM parameters structure.
     """
-    global VM_NAME
+
     return {
         'location': LOCATION,
         'os_profile': {
