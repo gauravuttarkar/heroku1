@@ -1,10 +1,13 @@
-### YA Message Attachment Builders ###
+"""
+YA Message Attachment Builders.
+"""
 from yellowant.messageformat import MessageAttachmentsClass, AttachmentFieldsClass
 
 from .buttons import update_item_button
 
 
 def item_attachment(item, user_integration, attachment=None):
+    """Function for item attachment."""
     attachment = attachment or MessageAttachmentsClass()
     attachment.title = item.get("title")
     attachment.text = item.get("description")

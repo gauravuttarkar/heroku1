@@ -1,13 +1,15 @@
-### YA Message Button Builders ###
+"""
+YA Message Button Builders
+"""
 from yellowant.messageformat import MessageButtonsClass
 
 
 def update_item_button(item, user_integration, text="Update", value=0, name=0):
+    """Function to update item button."""
     button = MessageButtonsClass()
     button.text = text
     button.value = value
     button.name = name
-    
     button.command = {
         "function_name": "updateitem",
         "service_application": user_integration.yellowant_integration_id,

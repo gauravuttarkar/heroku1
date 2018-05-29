@@ -18,19 +18,24 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 ### YellowAnt specific settings ###
 # URL to obtain oauth2 access for a YA user
 YA_OAUTH_URL = "https://www.yellowant.com/api/oauth2/authorize/"
-# URL to receive oauth2 codes from YA for user authentication. As a developer, you need to provide this URL in the YA
+#URL to receive oauth2 codes from YA for user authentication.As a developer,you
+# need to provide this URL in the YA
 # developer console so that YA knows exactly where to send the oauth2 codes.
-YA_REDIRECT_URL = "http://1ec89f60.ngrok.ioyellowant-oauth-redirect/"
+YA_REDIRECT_URL = "http://ce84a04f.ngrok.io/yellowant-oauth-redirect/"
 
 # Numerical ID generated when you register your application through the YA developer console
 YA_APP_ID = os.environ.get("YA_APP_ID", 1811)
-# Client ID generated from the YA developer console. Required to identify requests from this application to YA
+# Client ID generated from the YA developer console. Required to identify requests from this
+# application to YA
 YA_CLIENT_ID = os.environ.get("YA_CLIENT_ID", "TxRmOQKutIxNm7hyqTS7IXkQWnqVfxpPffFjJfds")
-# Client secret generated from the YA developer console. Required to identify requests from this application to YA
+# Client secret generated from the YA developer console. Required to identify requests from this
+# application to YA
 YA_CLIENT_SECRET = os.environ.get("YA_CLIENT_SECRET", "6alFGTuLyqnakx7NkYNCA3gtbW5NrRnFqJOYSH9LuJjcsUW18X0Wm1VCKqVbJaZ9VKjHodJI009KgayMs9HugKFElRefYeR5EfWK6peIZPZ2VGmGMhVDU6Ucl1PNVF0e")
-# Verification token generated from the YA developer console. This application can verify requests from YA as they will
+# Verification token generated from the YA developer console. This application can verify requests
+#  from YA as they will
 # carry the verification token
-YA_VERIFICATION_TOKEN = os.environ.get("YA_VERIFICATION_TOKEN", "6G8FMSWWDq8dsAPy2zSd6fhsDOWUUiP7IDY3LPc2g25OTUGi2gplh3P0x62L2ix1eMPCXAxjzwonxwakipddY0MK7b0auQvN7bmOZ8iLio1IfmjbK94Fwrx5PgMWhwaz")
+YA_VERIFICATION_TOKEN = os.environ.get("YA_VERIFICATION_TOKEN",
+                                       "6G8FMSWWDq8dsAPy2zSd6fhsDOWUUiP7IDY3LPc2g25OTUGi2gplh3P0x62L2ix1eMPCXAxjzwonxwakipddY0MK7b0auQvN7bmOZ8iLio1IfmjbK94Fwrx5PgMWhwaz")
 
 ### END YellowAnt specific settings ###
 
@@ -52,7 +57,7 @@ ALLOWED_HOSTS = ["*"]
 
 INSTALLED_APPS = [
     'yellowant_api.apps.YellowantApiConfig',
-    'todo.apps.TodoConfig',
+
     'web.apps.WebConfig',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -98,8 +103,12 @@ WSGI_APPLICATION = 'yellowant_todoapp.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'azure',
+        'USER': "root",
+        'PASSWORD': "root1234",
+        'HOST': "localhost",
+        'PORT': '',
     }
 }
 

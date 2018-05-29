@@ -1,9 +1,18 @@
 {% extends 'base.html' %}
 
 {% block title %}Home{% endblock %}
-
+<base href="/">
 {% block content %}
-{% if user.is_authenticated %}
+
+
+<script>
+  var djangoConstants ={
+    csrftoken: '{{ csrf_token }}',
+    base_href :"/",
+    application_id:348
+  };
+</script>
+ {% comment %} {% if user.is_authenticated %}
   <h3>Hi {{ user.username }}!</h3>
 
   {% if user_integrations %}
@@ -27,12 +36,33 @@
     <div>You don't have any integrations yet.</div>
   {% endif %}
 
-  <p><a href="/create-new-integration/"><button>Create New Integration</button></a></p>
-    
+  <p><a href="getyellowantauthurl/"><button>Create New Integration</button></a></p>
+
   <p><a href="{% url 'logout' %}">logout</a></p>
 {% else %}
   <p>You are not logged in</p>
   <a href="{% url 'login' %}">login</a>
-{% endif %}
+{% endif %} {% endcomment %}
+
+<div ng-app="azure-app"><yellowant-azure-app></yellowant-azure-app>
+  <script src="https://s3.amazonaws.com/ya-stage-common/angular-static/angular.js/1.6.4/angular.min.js"></script>
+
+  <script src="https://s3.amazonaws.com/ya-stage-common/angular-static/angular.js/1.6.4/angular-animate.min.js"></script>
+
+  <script src="https://s3.amazonaws.com/ya-stage-common/angular-static/angular-ui-router/1.0.3/angular-ui-router.min.js"></script>
+
+  <script src="https://s3.amazonaws.com/ya-stage-common/angular-static/angular-material/1.1.4/angular-material.min.js"></script>
+
+  <script src="https://s3.amazonaws.com/ya-stage-common/angular-static/angular.js/1.6.4/angular-messages.min.js"></script>
+
+  <script src="https://s3.amazonaws.com/ya-stage-common/angular-static/angular.js/1.6.4/angular-aria.min.js"></script>
+
+
+
+
+  <script src="http://localhost:3011/bundle/main.js"></script>
+
+</div>
+
 
 {% endblock %}
