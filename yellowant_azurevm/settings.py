@@ -11,9 +11,14 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 """
 
 import os
+import json
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# BASE_URL = "http://b58b87ef.ngrok.io"
+
+app_name = os.environ.get("HEROKU_APP_NAME")
+BASE_URL = "https://{}.herokuapp.com".format(app_name)
 
 ### YellowAnt specific settings ###
 # URL to obtain oauth2 access for a YA user
@@ -21,21 +26,28 @@ YA_OAUTH_URL = "https://www.yellowant.com/api/oauth2/authorize/"
 #URL to receive oauth2 codes from YA for user authentication.As a developer,you
 # need to provide this URL in the YA
 # developer console so that YA knows exactly where to send the oauth2 codes.
-YA_REDIRECT_URL = "http://b58b87ef.ngrok.io/yellowant-oauth-redirect/"
+YA_REDIRECT_URL = BASE_URL + "/yellowant-oauth-redirect/"
 
 # Numerical ID generated when you register your application through the YA developer console
-YA_APP_ID = os.environ.get("YA_APP_ID", 1811)
+# YA_APP_ID = os.environ.get("YA_APP_ID", 1811)
 # Client ID generated from the YA developer console. Required to identify requests from this
-# application to YA
-YA_CLIENT_ID = os.environ.get("YA_CLIENT_ID", "TxRmOQKutIxNm7hyqTS7IXkQWnqVfxpPffFjJfds")
-# Client secret generated from the YA developer console. Required to identify requests from this
-# application to YA
-YA_CLIENT_SECRET = os.environ.get("YA_CLIENT_SECRET", "6alFGTuLyqnakx7NkYNCA3gtbW5NrRnFqJOYSH9LuJjcsUW18X0Wm1VCKqVbJaZ9VKjHodJI009KgayMs9HugKFElRefYeR5EfWK6peIZPZ2VGmGMhVDU6Ucl1PNVF0e")
-# Verification token generated from the YA developer console. This application can verify requests
-#  from YA as they will
-# carry the verification token
-YA_VERIFICATION_TOKEN = os.environ.get("YA_VERIFICATION_TOKEN",
-                                       "6G8FMSWWDq8dsAPy2zSd6fhsDOWUUiP7IDY3LPc2g25OTUGi2gplh3P0x62L2ix1eMPCXAxjzwonxwakipddY0MK7b0auQvN7bmOZ8iLio1IfmjbK94Fwrx5PgMWhwaz")
+# # application to YA
+# YA_CLIENT_ID = os.environ.get("YA_CLIENT_ID", "TxRmOQKutIxNm7hyqTS7IXkQWnqVfxpPffFjJfds")
+# # Client secret generated from the YA developer console. Required to identify requests from this
+# # application to YA
+# YA_CLIENT_SECRET = os.environ.get("YA_CLIENT_SECRET", "6alFGTuLyqnakx7NkYNCA3gtbW5NrRnFqJOYSH9LuJjcsUW18X0Wm1VCKqVbJaZ9VKjHodJI009KgayMs9HugKFElRefYeR5EfWK6peIZPZ2VGmGMhVDU6Ucl1PNVF0e")
+# # Verification token generated from the YA developer console. This application can verify requests
+# #  from YA as they will
+# # carry the verification token
+# YA_VERIFICATION_TOKEN = os.environ.get("YA_VERIFICATION_TOKEN",
+#                                        "6G8FMSWWDq8dsAPy2zSd6fhsDOWUUiP7IDY3LPc2g25OTUGi2gplh3P0x62L2ix1eMPCXAxjzwonxwakipddY0MK7b0auQvN7bmOZ8iLio1IfmjbK94Fwrx5PgMWhwaz")
+#
+data = open('yellowant_app_credentials.json').read()
+data_json = json.loads(data)
+
+YA_CLIENT_ID = str(data_json['client_id'])
+YA_CLIENT_SECRET = str(data_json['client_secret'])
+YA_VERIFICATION_TOKEN = str(data_json['verification_token'])
 
 ### END YellowAnt specific settings ###
 
@@ -50,7 +62,8 @@ SECRET_KEY = '#x9q+c*t9$=buk$i@m&6e+k@m(q@uds0gd=9=3cej6u#_u=m*%'
 DEBUG = True
 
 # SECURITY WARNING: remove wildcard condition from ALLOWED_HOSTS
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = ["*","{}.herokuapp.com".format(app_name)]
+
 
 
 # Application definition
@@ -69,6 +82,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     # 'django.middleware.csrf.CsrfViewMiddleware',
@@ -112,6 +126,10 @@ DATABASES = {
     }
 }
 
+import dj_database_url
+db_from_env = dj_database_url.config()
+DATABASES['default'].update(db_from_env)
+DATABASES['default']['CONN_MAX_AGE'] = 500
 
 # Password validation
 # https://docs.djangoproject.com/en/2.0/ref/settings/#auth-password-validators

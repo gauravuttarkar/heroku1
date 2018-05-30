@@ -1,0 +1,42 @@
+{
+  "name": "yellowant_azurevm",
+  "description": "Enjoy Azure Integration on YellowAnt",
+  "repository": "https://github.com/apurvakhatri/surveymonkeyapp1",
+  "keywords": ["python3", "django2","yellowant"],
+  "env": {
+    "YA_DEVELOPER_TOKEN": {
+      "description": "YellowAnt Developer Token",
+      "required": true
+    },
+    "HEROKU_APP_NAME": {
+      "description": "Heroku App name",
+      "required": true
+    },
+
+    "DISABLE_COLLECTSTATIC": {
+      "required": false,
+      "value": "1"
+    },
+
+    "AZURE_TENANT_ID": {
+        "description": "Directory ID of the Azure Active Directory",
+        "required" : true
+    }
+
+    "AZURE_CLIENT_ID" : {
+        "description": "Application ID in Azure",
+        "required" : true
+    }
+
+    "AZURE_CLIENT_SECRET" : {
+        "description" : "Secret key generated in the application",
+        "required" : true
+    }
+
+    "AZURE_SUBSCRIPTION_ID" : {
+        "description" : "Subscription ID of the Azure account",
+        "required" : true
+    }
+
+  }
+}

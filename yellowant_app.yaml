@@ -1,107 +1,379 @@
-api_url: http://localhost:8000/yellowant-api/
-creator_email: manik@yellowant.com
-documentation_url: http://localhost:8000/
+api_url: http://b58b87ef.ngrok.io/yellowant-api/
+client_id: TxRmOQKutIxNm7hyqTS7IXkQWnqVfxpPffFjJfds
+client_secret: 6alFGTuLyqnakx7NkYNCA3gtbW5NrRnFqJOYSH9LuJjcsUW18X0Wm1VCKqVbJaZ9VKjHodJI009KgayMs9HugKFElRefYeR5EfWK6peIZPZ2VGmGMhVDU6Ucl1PNVF0e
+creator_email: gaurav.uttarkar@gmail.com
+documentation_url: https://www.yellowant.com/api/
 functions:
-  createitem:
+  attachdisk:
     function_type: 1
     input_args:
-      description:
+      Resource-Group:
         arg_type: 14
-        description: The i of the issue
-        example: Leaving for an extended weekend plan to Goa
-        name: description
-        required: 0
-      title:
-        arg_type: 14
-        description: Title of the item
-        example: Email boss for sick leave
-        name: title
+        description: Name of the Resource Group
+        example: rg1
+        name: Resource-Group
         required: 1
-    invoke_name: createitem
+      disk_name:
+        arg_type: 14
+        description: Name of the disk to be created.
+        example: disk1
+        name: disk_name
+        required: 1
+      vm_name:
+        arg_type: 14
+        description: Name of the Virtual Machine to which this disk has to be added
+        example: vm1
+        name: vm_name
+        required: 1
+    invoke_name: attachdisk
     is_active: 1
     max_retries: 0
-    name: Create Item
+    name: Attach Disk
     output_keys: {}
     privacy_mode: 0
     rate_limited: 0
-    short_description: Add a todo item to the list
+    short_description: It attaches a Disk of the specified size to the specified VM
     user_rate_limit: 0.0
-  deleteitem:
+  create_resgrp:
     function_type: 1
     input_args:
-      id:
+      Resource-Group:
+        arg_type: 14
+        description: Name of the resource group to be created.
+        example: rg_name
+        name: Resource-Group
+        required: 1
+    invoke_name: create_resgrp
+    is_active: 1
+    max_retries: 0
+    name: Create Resource Group
+    output_keys: {}
+    privacy_mode: 0
+    rate_limited: 0
+    short_description: It creates a resource group.
+    user_rate_limit: 0.0
+  createdisk:
+    function_type: 1
+    input_args:
+      Resource-Group:
+        arg_type: 14
+        description: Name of the resource group
+        example: rg1
+        name: Resource-Group
+        required: 1
+      disk_name:
+        arg_type: 14
+        description: Name of the disk
+        example: disk1
+        name: disk_name
+        required: 1
+      disk_size:
         arg_type: 1
-        description: ID of the item
-        example: '7'
-        name: id
+        description: Size of the disk in GB
+        example: '1'
+        name: disk_size
         required: 1
-    invoke_name: deleteitem
+    invoke_name: createdisk
     is_active: 1
     max_retries: 0
-    name: Delete Item
+    name: Create Disk
     output_keys: {}
     privacy_mode: 0
     rate_limited: 0
-    short_description: Delete a todo item from the list
+    short_description: Creates a Disk
     user_rate_limit: 0.0
-  getlist:
+  createvm:
+    function_type: 1
+    input_args:
+      Resource-Group:
+        arg_type: 14
+        description: Name of the Resource group to which the Virtual Machine has to
+          be added.
+        example: MyResourceGroup
+        name: Resource-Group
+        required: 1
+      VM-Name:
+        arg_type: 14
+        description: Name of the Virtual Machine you want to create
+        example: my_vm_1
+        name: VM-Name
+        required: 1
+      ipconfig_name:
+        arg_type: 14
+        description: IP_CONFIG NAME
+        example: admin-ip-config
+        name: ipconfig_name
+        required: 1
+      location:
+        arg_type: 14
+        description: Location of the VM
+        example: westus
+        name: location
+        required: 1
+      nic_name:
+        arg_type: 14
+        description: NIC_NAME of the VM
+        example: admin-nic
+        name: nic_name
+        required: 1
+      password:
+        arg_type: 14
+        description: Password of the account
+        example: password
+        name: password
+        required: 1
+      subnet_name:
+        arg_type: 14
+        description: SUBNET_NAME
+        example: admin-subnet
+        name: subnet_name
+        required: 1
+      username:
+        arg_type: 14
+        description: USERNAME of the user
+        example: username
+        name: username
+        required: 1
+      vnet_name:
+        arg_type: 14
+        description: VNET_NAME of the VM
+        example: admin-vnet
+        name: vnet_name
+        required: 1
+    invoke_name: createvm
+    is_active: 1
+    max_retries: 0
+    name: Create VM
+    output_keys: {}
+    privacy_mode: 0
+    rate_limited: 0
+    short_description: Creates a VM in Azure portal of the specified user
+    user_rate_limit: 0.0
+  delete_resgrp:
+    function_type: 1
+    input_args:
+      Resource-Group:
+        arg_type: 14
+        description: Name of the Resource group to be deleted.
+        example: nameofres
+        name: Resource-Group
+        required: 1
+    invoke_name: delete_resgrp
+    is_active: 1
+    max_retries: 0
+    name: Delete Resource Group
+    output_keys: {}
+    privacy_mode: 0
+    rate_limited: 0
+    short_description: It deletes the particular resource group.
+    user_rate_limit: 0.0
+  deletevm:
+    function_type: 1
+    input_args:
+      group_name:
+        arg_type: 14
+        description: Group name of the VM to be deleted
+        example: group_name
+        name: group_name
+        required: 1
+      vm_name:
+        arg_type: 14
+        description: Name of the VM to be deleted
+        example: vm1
+        name: vm_name
+        required: 1
+    invoke_name: deletevm
+    is_active: 1
+    max_retries: 0
+    name: Delete VM
+    output_keys: {}
+    privacy_mode: 0
+    rate_limited: 0
+    short_description: This command deletes the VM
+    user_rate_limit: 0.0
+  detachdisk:
+    function_type: 1
+    input_args:
+      Resource-Group:
+        arg_type: 14
+        description: Name of the resource group
+        example: rg
+        name: Resource-Group
+        required: 1
+      disk_name:
+        arg_type: 14
+        description: Name of Disk to be detached
+        example: disk1
+        name: disk_name
+        required: 1
+      vm_name:
+        arg_type: 14
+        description: Name of the VM
+        example: vm1
+        name: vm_name
+        required: 1
+    invoke_name: detachdisk
+    is_active: 1
+    max_retries: 0
+    name: Detach disk
+    output_keys: {}
+    privacy_mode: 0
+    rate_limited: 0
+    short_description: Detachs a disk from a VM
+    user_rate_limit: 0.0
+  listallrgs:
     function_type: 1
     input_args: {}
-    invoke_name: getlist
-    is_active: 1
+    invoke_name: listallrgs
+    is_active: 0
     max_retries: 0
-    name: Get List
-    output_keys: {}
+    name: List all Resource Groups
+    output_keys:
+      _keys:
+        list: '[list]:    List of List'
+      list:
+        Resource_name: '__unicode:    List of resource group names'
     privacy_mode: 0
     rate_limited: 0
-    short_description: Get the list of todo items
+    short_description: It lists all the resource groups.
     user_rate_limit: 0.0
-  updateitem:
+  listallvms:
+    function_type: 1
+    input_args: {}
+    invoke_name: listallvms
+    is_active: 1
+    max_retries: 0
+    name: List all VMs
+    output_keys:
+      _keys:
+        list: '[list]:    List of List'
+      list:
+        VM_name: '__unicode:    List  region  names'
+    privacy_mode: 0
+    rate_limited: 0
+    short_description: It lists all the VMs
+    user_rate_limit: 0.0
+  listallvmsinrg:
     function_type: 1
     input_args:
-      description:
+      Resource-Group:
         arg_type: 14
-        description: The description of the issue
-        example: Leaving for an extended weekend plan to Goa
-        name: description
-        required: 0
-      id:
-        arg_type: 1
-        description: ID of the item
-        example: '7'
-        name: id
+        description: Name of the Resource Group
+        example: rg1
+        name: Resource-Group
         required: 1
-      title:
-        arg_type: 14
-        description: Title of the item
-        example: Email boss for sick leave
-        name: title
-        required: 0
-    invoke_name: updateitem
+    invoke_name: listallvmsinrg
     is_active: 1
     max_retries: 0
-    name: Update Item
+    name: List all VMs in a RG
+    output_keys:
+      _keys:
+        list: '[list]:    List of List'
+      list:
+        VM_name: '__unicode:    List  region  names'
+    privacy_mode: 0
+    rate_limited: 0
+    short_description: It lists all the VMs in a particular Resource group
+    user_rate_limit: 0.0
+  restartvm:
+    function_type: 1
+    input_args:
+      group_name:
+        arg_type: 14
+        description: Name of the Resource group to which the VM belongs to
+        example: groupname
+        name: group_name
+        required: 1
+      vm_name:
+        arg_type: 14
+        description: Name of the Virtual Machine to be restarted
+        example: vmname
+        name: vm_name
+        required: 1
+    invoke_name: restartvm
+    is_active: 1
+    max_retries: 0
+    name: Restart VM
     output_keys: {}
     privacy_mode: 0
     rate_limited: 0
-    short_description: Update a todo item in the list
+    short_description: Restarts the specified VM
     user_rate_limit: 0.0
-icon_url: https://cdn4.iconfinder.com/data/icons/iconsimple-logotypes/512/github-512.png
-id: 79
-install_page_url: http://localhost:8000/
-invoke_name: todo2
+  start_vm_webhook:
+    function_type: 2
+    input_args: {}
+    invoke_name: start_vm_webhook
+    is_active: 1
+    max_retries: 0
+    name: Start VM webhook
+    output_keys: {}
+    privacy_mode: 0
+    rate_limited: 0
+    short_description: Webhook for displaying the status of operation.
+    user_rate_limit: 0.0
+  startvm:
+    function_type: 1
+    input_args:
+      group_name:
+        arg_type: 14
+        description: Name of the group to which the VM belongs to
+        example: group_name
+        name: group_name
+        required: 1
+      vm_name:
+        arg_type: 14
+        description: Name of the VM to be started
+        example: vmname
+        name: vm_name
+        required: 1
+    invoke_name: startvm
+    is_active: 1
+    max_retries: 0
+    name: Start VM
+    output_keys: {}
+    privacy_mode: 0
+    rate_limited: 0
+    short_description: To start the VM
+    user_rate_limit: 0.0
+  stopvm:
+    function_type: 1
+    input_args:
+      group_name:
+        arg_type: 14
+        description: Group name of the VM to be deleted
+        example: groupname
+        name: group_name
+        required: 1
+      vm_name:
+        arg_type: 14
+        description: Name of the VM to be deleted
+        example: vmname
+        name: vm_name
+        required: 1
+    invoke_name: stopvm
+    is_active: 1
+    max_retries: 0
+    name: Stop VM
+    output_keys: {}
+    privacy_mode: 0
+    rate_limited: 0
+    short_description: It stops the specified VM
+    user_rate_limit: 0.0
+icon_url: data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAATYAAACjCAMAAAA3vsLfAAAAilBMVEX///8VZr/2+v0NZL4AXrw/esYAXbwAYb2ZuOAAWrsAYr7x9vsAWbsAV7r7/f7C1Ox4n9XL2+/n7/ijvuLh6vZDfsizyeeNrtvY5PMjb8OApthTiMwxdMRpltLs8vnS4PFYi82xx+bE1u2owuR7otcnccOVtN5rl9IyeccZasBLg8pbkNAATbeHq9pZf1WZAAAJJElEQVR4nO2d6WKyOhCGGxJBQFGpC1pFWz+r1uP9394Rl0oWYIhYksjzU9HGaUJm5p0Jb28NDQ0NDQ0NhvNV9wC05LiuewQaYm03Vt1j0I/wo/te9xj0I9qQjV/3ILSj53nku+5BaMe3i/E+rnsUurF1ESLHukehGdaIIIRJWPc49CJEDkLI6dc9Dr34It7JasiO6h6IVrzbOLGas029ts28uuHC7GI15A7ur4
+id: 1811
+install_page_url: http://b58b87ef.ngrok.io
+invoke_name: azure
 is_active: 1
-is_production_or_sandbox: 1
-long_description: A simple application to add, read, update and delete items from
-  a todo list
-name: Todo Sample App
-privacy_policy_url: http://localhost:8000/
+is_production_or_sandbox: 0
+long_description: An application to manage various functionalities of Microsoft Azure.
+name: Azure
+privacy_policy_url: https://www.yellowant.com/common/privacy/
 rate_limit: 0.0
 rate_limited: 0
-redirect_uris: http://localhost:8000/yellowant-oauth-redirect/
-short_description: GitHub is a web-based Git or version control repository and Internet
-  hosting service. It offers all of the distributed version control and source code
-  management functionality of Git as well as adding its own features.
+redirect_uris: http://b58b87ef.ngrok.io/yellowant-oauth-redirect/
+rtm_token: ot02eWfSroUeJ7srhCtikF5D76Eb9yUf7DX8UCoTEDy85RUFplu6TqyAG4wQPTqpypGTJDNvTerLKxXi2FRG5NaEeZOVEmpmAvC3bR5y9MHIfrTXC2EHZU9C4uXJSHub
+short_description: An application to manage various functionalities of Microsoft Azure.
 user_rate_limit: 0.0
-visibility_scope: 2
-website: http://localhost:8000/
+verification_token: 6G8FMSWWDq8dsAPy2zSd6fhsDOWUUiP7IDY3LPc2g25OTUGi2gplh3P0x62L2ix1eMPCXAxjzwonxwakipddY0MK7b0auQvN7bmOZ8iLio1IfmjbK94Fwrx5PgMWhwaz
+visibility_scope: 0
+website: http://b58b87ef.ngrok.io

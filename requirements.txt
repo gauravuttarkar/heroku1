@@ -1,2 +1,6 @@
 yellowant
 django
+mysqlclient
+azure
+haikunator
+

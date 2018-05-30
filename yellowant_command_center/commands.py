@@ -11,6 +11,7 @@ from azure.mgmt.compute.models import DiskCreateOption
 from msrestazure.azure_exceptions import CloudError
 from haikunator import Haikunator
 from yellowant_api.models import azure
+import os
 
 class CreateVMThread(Thread):
     """Creates a VM using a separate thread."""
@@ -25,7 +26,7 @@ class CreateVMThread(Thread):
         global GROUP_NAME, VM_NAME, USERNAME, PASSWORD
 
         message = MessageClass()
-        credentials, subscription_id = get_credentials()
+        credentials, subscription_id = get_credentials(self.user_integration)
         compute_client = ComputeManagementClient(credentials, subscription_id)
         network_client = NetworkManagementClient(credentials, subscription_id)
         GROUP_NAME = self.args.get("Resource-Group")
@@ -91,11 +92,25 @@ NIC_NAME = 'azure-sample-nic1'
 USERNAME = 'userlogin'
 PASSWORD = 'Pa$$w0rd91'
 VM_NAME = 'VmName'
+#
+# AZURE_TENANT_ID="b4797bec-4e9f-4515-90d4-398536ab71b7"
+# AZURE_CLIENT_ID="1431ca73-1d91-46c7-b674-55fda3f4ee04"
+# AZURE_CLIENT_SECRET="0KdUhM/nVaotys/fN6DACONe8iY8XlPZGCc2q3yHLxc="
+# AZURE_SUBSCRIPTION_ID="bb1348ac-601d-4100-8520-6099fa2ac73b"
 
-AZURE_TENANT_ID="b4797bec-4e9f-4515-90d4-398536ab71b7"
-AZURE_CLIENT_ID="1431ca73-1d91-46c7-b674-55fda3f4ee04"
-AZURE_CLIENT_SECRET="0KdUhM/nVaotys/fN6DACONe8iY8XlPZGCc2q3yHLxc="
-AZURE_SUBSCRIPTION_ID="bb1348ac-601d-4100-8520-6099fa2ac73b"
+AZURE_TENANT_ID = os.environ.get("AZURE_TENANT_ID")
+AZURE_CLIENT_ID = os.environ.get("AZURE_CLIENT_ID")
+AZURE_CLIENT_SECRET = os.environ.get("AZURE_CLIENT_SECRET")
+AZURE_SUBSCRIPTION_ID = os.environ.get("AZURE_SUBSCRIPTION_ID")
+
+# def get_azure_details(user_integration):
+#     global AZURE_TENANT_ID,AZURE_CLIENT_ID,AZURE_CLIENT_SECRET,AZURE_SUBSCRIPTION_ID
+#     obj=azure.objects.get(user_integration_id=user_integration.id)
+#     AZURE_TENANT_ID = obj.AZURE_tenant_id
+#     AZURE_CLIENT_ID = obj.AZURE_client_id
+#     AZURE_CLIENT_SECRET = obj.AZURE_client_secret
+#     AZURE_SUBSCRIPTION_ID = obj.AZURE_subscription_id
+
 
 VM_REFERENCE = {
     'linux': {
@@ -112,19 +127,27 @@ VM_REFERENCE = {
     }
 }
 
-def get_credentials():
-    subscription_id = AZURE_SUBSCRIPTION_ID
+def get_credentials(user_integration):
+    obj = azure.objects.get(user_integration_id=user_integration.id)
+    subscription_id = obj.AZURE_subscription_id
+
     credentials = ServicePrincipalCredentials(
-        client_id=AZURE_CLIENT_ID,
-        secret=AZURE_CLIENT_SECRET,
-        tenant=AZURE_TENANT_ID
+        client_id=obj.AZURE_client_id,
+        secret=obj.AZURE_client_secret,
+        tenant=obj.AZURE_tenant_id
     )
+    print(obj.AZURE_client_id)
+    print(obj.AZURE_client_secret)
+    print(obj.AZURE_tenant_id)
+    print(obj.AZURE_subscription_id)
+
     return credentials, subscription_id
 
 def create_resource_group(args,user_integration):
     # global GROUP_NAME,VM_NAME
+
     message = MessageClass()
-    credentials, subscription_id = get_credentials()
+    credentials, subscription_id = get_credentials(user_integration)
     resource_client = ResourceManagementClient(credentials, subscription_id)
     print('\nCreating Resource Group')
     GROUP_NAME = args.get("Resource-Group")
@@ -137,7 +160,7 @@ def create_resource_group(args,user_integration):
 
 def delete_resource_group(args,user_integration):
     message = MessageClass()
-    credentials, subscription_id = get_credentials()
+    credentials, subscription_id = get_credentials(user_integration)
     resource_client = ResourceManagementClient(credentials, subscription_id)
     GROUP_NAME = args.get("Resource-Group")
     print('\nDelete Resource Group')
@@ -160,7 +183,7 @@ def create_vm(args,user_integration):
 
 def delete_vm(args,user_integration):
     message = MessageClass()
-    credentials, subscription_id = get_credentials()
+    credentials, subscription_id = get_credentials(user_integration)
     resource_client = ResourceManagementClient(credentials, subscription_id)
     compute_client = ComputeManagementClient(credentials, subscription_id)
     network_client = NetworkManagementClient(credentials, subscription_id)
@@ -183,7 +206,7 @@ def start_vm(args , user_integration):
     GROUP_NAME=args.get('group_name')
     VM_NAME=args.get('vm_name')
     message = MessageClass()
-    credentials, subscription_id = get_credentials()
+    credentials, subscription_id = get_credentials(user_integration)
     compute_client = ComputeManagementClient(credentials, subscription_id)
     # Start the VM
     print('\nStart VM')
@@ -198,7 +221,7 @@ def stop_vm(args , user_integration):
     GROUP_NAME=args.get('group_name')
     VM_NAME=args.get('vm_name')
     message = MessageClass()
-    credentials, subscription_id = get_credentials()
+    credentials, subscription_id = get_credentials(user_integration)
     compute_client = ComputeManagementClient(credentials, subscription_id)
     print('\nStop VM')
     async_vm_stop = compute_client.virtual_machines.power_off(GROUP_NAME, VM_NAME)
@@ -210,7 +233,7 @@ def restart_vm(args , user_integration):
     GROUP_NAME=args.get('group_name')
     VM_NAME=args.get('vm_name')
     message = MessageClass()
-    credentials, subscription_id = get_credentials()
+    credentials, subscription_id = get_credentials(user_integration)
     compute_client = ComputeManagementClient(credentials, subscription_id)
 
     print('\nRestart VM')
@@ -221,11 +244,12 @@ def restart_vm(args , user_integration):
 
 def list_all_vms(args , user_integration):
     message = MessageClass()
-    credentials, subscription_id = get_credentials()
+    credentials, subscription_id = get_credentials(user_integration)
     compute_client = ComputeManagementClient(credentials, subscription_id)
     print('Integration ID is',user_integration.yellowant_integration_token)
     print('ID is ', user_integration.id)
-
+    obj=azure.objects.get(user_integration_id=user_integration.id)
+    print(obj.AZURE_tenant_id)
     print('\nList VMs in subscription')
     data = {'list': []}
     message.message_text = "Listing all VMs"
@@ -239,7 +263,7 @@ def list_all_vms(args , user_integration):
 def list_all_vms_in_rg(args,user_integration):
     message = MessageClass()
     GROUP_NAME = args.get("Resource-Group")
-    credentials, subscription_id = get_credentials()
+    credentials, subscription_id = get_credentials(user_integration)
     compute_client = ComputeManagementClient(credentials, subscription_id)
     print('\nList VMs in resource group')
     message.message_text = "Listing all VMs"
@@ -252,9 +276,9 @@ def list_all_vms_in_rg(args,user_integration):
     message.data = data
     return message
 
-def list_regions(args,users):
+def list_regions(args,user_integration):
     m = MessageClass()
-    credentials, subscription_id = get_credentials()
+    credentials, subscription_id = get_credentials(user_integration)
     client = ResourceManagementClient(credentials, subscription_id)
     data = {'list': []}
     for item in client.resource_groups.list():
@@ -269,7 +293,7 @@ def create_disk(args , user_integration):
     GROUP_NAME = args.get("Resource-Group")
     SIZE = args.get("disk_size")
     DISK_NAME = args.get("disk_name")
-    credentials, subscription_id = get_credentials()
+    credentials, subscription_id = get_credentials(user_integration)
     compute_client = ComputeManagementClient(credentials, subscription_id)
 
     print('\nCreate (empty) managed Data Disk')
@@ -296,7 +320,7 @@ def attach_disk(args , user_integration):
     VM_NAME = args.get("vm_name")
     DISK_NAME = args.get("disk_name")
 
-    credentials, subscription_id = get_credentials()
+    credentials, subscription_id = get_credentials(user_integration)
     compute_client = ComputeManagementClient(credentials, subscription_id)
 
     virtual_machine = compute_client.virtual_machines.get(
@@ -338,7 +362,7 @@ def detach_disk(args,user_integration):
     GROUP_NAME = args.get("Resource-Group")
     VM_NAME = args.get("vm_name")
     DISK_NAME = args.get("disk_name")
-    credentials, subscription_id = get_credentials()
+    credentials, subscription_id = get_credentials(user_integration)
     compute_client = ComputeManagementClient(credentials, subscription_id)
 
     virtual_machine = compute_client.virtual_machines.get(
