@@ -10,6 +10,7 @@ from azure.mgmt.compute import ComputeManagementClient
 from azure.mgmt.compute.models import DiskCreateOption
 from msrestazure.azure_exceptions import CloudError
 from haikunator import Haikunator
+from yellowant_api.models import azure
 
 class CreateVMThread(Thread):
     """Creates a VM using a separate thread."""
@@ -223,6 +224,8 @@ def list_all_vms(args , user_integration):
     credentials, subscription_id = get_credentials()
     compute_client = ComputeManagementClient(credentials, subscription_id)
     print('Integration ID is',user_integration.yellowant_integration_token)
+    print('ID is ', user_integration.id)
+
     print('\nList VMs in subscription')
     data = {'list': []}
     message.message_text = "Listing all VMs"
