@@ -25,7 +25,6 @@ azure-mgmt-authorization==0.40.0
 azure-mgmt-batch==5.0.0
 azure-mgmt-batchai==1.0.1
 azure-mgmt-billing==0.2.0
-azure-mgmt-botservice==0.1.0
 azure-mgmt-cdn==2.0.0
 azure-mgmt-cognitiveservices==3.0.0
 azure-mgmt-commerce==1.0.1
