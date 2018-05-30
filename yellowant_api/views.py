@@ -96,11 +96,11 @@ def yellowant_oauth_redirect(request):
 
     print(commands.AZURE_TENANT_ID, commands.AZURE_SUBSCRIPTION_ID)
     azure.objects.create(user_integration=user_t,
-                         AZURE_tenant_id=commands.AZURE_TENANT_ID,
-                         AZURE_client_id=commands.AZURE_CLIENT_ID,
-                         AZURE_subscription_id=commands.AZURE_SUBSCRIPTION_ID,
-                         AZURE_client_secret=commands.AZURE_CLIENT_SECRET,
-                         AZURE_update_login_flag=True)
+                         AZURE_tenant_id="Default",
+                         AZURE_client_id="Default",
+                         AZURE_subscription_id="Default",
+                         AZURE_client_secret="Default",
+                         AZURE_update_login_flag=False)
     # A new YA user integration has been created and the details have been successfully saved in
     # your
     # application's
@@ -170,6 +170,7 @@ def api_key(request):
         aby.AZURE_client_id = data['AZURE_client_id']
         aby.AZURE_subscription_id = data['AZURE_subscription_id']
         aby.AZURE_client_secret = data['AZURE_client_secret']
+        aby.AZURE_update_login_flag = True
         aby.save()
 
     return HttpResponse("Success", status=200)
