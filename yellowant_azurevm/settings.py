@@ -35,12 +35,14 @@ YA_REDIRECT_URL = BASE_URL + "/yellowant-oauth-redirect/"
 # YA_CLIENT_ID = os.environ.get("YA_CLIENT_ID", "TxRmOQKutIxNm7hyqTS7IXkQWnqVfxpPffFjJfds")
 # # Client secret generated from the YA developer console. Required to identify requests from this
 # # application to YA
-# YA_CLIENT_SECRET = os.environ.get("YA_CLIENT_SECRET", "6alFGTuLyqnakx7NkYNCA3gtbW5NrRnFqJOYSH9LuJjcsUW18X0Wm1VCKqVbJaZ9VKjHodJI009KgayMs9HugKFElRefYeR5EfWK6peIZPZ2VGmGMhVDU6Ucl1PNVF0e")
+# YA_CLIENT_SECRET = os.environ.get("YA_CLIENT_SECRET", "6alFGTuLyqnakx7NkYNCA3gtbW5NrRnFqJOYSH9
+# LuJjcsUW18X0Wm1VCKqVbJaZ9VKjHodJI009KgayMs9HugKFElRefYeR5EfWK6peIZPZ2VGmGMhVDU6Ucl1PNVF0e")
 # # Verification token generated from the YA developer console. This application can verify requests
 # #  from YA as they will
 # # carry the verification token
 # YA_VERIFICATION_TOKEN = os.environ.get("YA_VERIFICATION_TOKEN",
-#                                        "6G8FMSWWDq8dsAPy2zSd6fhsDOWUUiP7IDY3LPc2g25OTUGi2gplh3P0x62L2ix1eMPCXAxjzwonxwakipddY0MK7b0auQvN7bmOZ8iLio1IfmjbK94Fwrx5PgMWhwaz")
+#             "6G8FMSWWDq8dsAPy2zSd6fhsDOWUUiP7IDY3LPc2g25OTUGi2gplh3P0x62L2ix1eMPCXAxjzwonxwakipd
+# dY0MK7b0auQvN7bmOZ8iLio1IfmjbK94Fwrx5PgMWhwaz")
 #
 data = open('yellowant_app_credentials.json').read()
 data_json = json.loads(data)
@@ -62,7 +64,7 @@ SECRET_KEY = '#x9q+c*t9$=buk$i@m&6e+k@m(q@uds0gd=9=3cej6u#_u=m*%'
 DEBUG = True
 
 # SECURITY WARNING: remove wildcard condition from ALLOWED_HOSTS
-ALLOWED_HOSTS = ["*","{}.herokuapp.com".format(app_name)]
+ALLOWED_HOSTS = ["*", "{}.herokuapp.com".format(app_name)]
 
 
 

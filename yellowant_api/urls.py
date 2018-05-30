@@ -12,4 +12,3 @@ urlpatterns = [
     path("yellowant-api/", yellowant_api, name="yellowant-api"),
     path("apikey/", api_key, name="yellowant-api"),
 ]
-
