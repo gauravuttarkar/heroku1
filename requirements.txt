@@ -48,4 +48,4 @@ socketIO-client==0.7.2
 urllib3==1.22
 websocket-client==0.47.0
 wrapt==1.10.11
-yellowant==0.0.27
+yellowant==0.0.30
