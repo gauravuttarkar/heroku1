@@ -21,17 +21,17 @@
     "AZURE_TENANT_ID": {
         "description": "Directory ID of the Azure Active Directory",
         "required" : true
-    }
+    },
 
     "AZURE_CLIENT_ID" : {
         "description": "Application ID in Azure",
         "required" : true
-    }
+    },
 
     "AZURE_CLIENT_SECRET" : {
         "description" : "Secret key generated in the application",
         "required" : true
-    }
+    },
 
     "AZURE_SUBSCRIPTION_ID" : {
         "description" : "Subscription ID of the Azure account",
