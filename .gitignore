@@ -1,5 +1,14 @@
 # Sourced from https://github.com/github/gitignore/blob/master/Python.gitignore
 
+Hybrid/*
+tests/*
+unmanaged-disks/*
+virtual-machines-python-manage/*
+web/static/node_modules/*
+*/node_modules/*
+.idea/*
+
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

@@ -1,0 +1,162 @@
+<div ng-if="$ctrl.status" id="status">
+    <b layout="row" layout-align="center center" class="md-padding">
+      <h1>{{$ctrl.status}}</h1>
+    </b>
+</div>
+
+
+<!--<div class="layout-container">-->
+	<!--<div class= 'form-group pa4 mb4' md-whiteframe="1">-->
+		<!--<h3>Notifications</h3>-->
+		<!--<md-switch ng-change="$ctrl.submitSettings()" ng-model="$ctrl.accountDetails.notification" aria-label="Switch 1">-->
+			 <!--Send notifications when there are new tickets-->
+		<!--</md-switch>-->
+	<!--</div>-->
+<!--</div>-->
+
+<div class="layout-container">
+<form name='$ctrl.form' ng-submit='$ctrl.submitForm()' novalidate>
+	<div class= 'form-group pa4 mb4' md-whiteframe="1">
+       <div ng-if="$ctrl.accountDetails.AZURE_update_login_flag">
+        <div ng-if="!$ctrl.userAccounts.is_valid" md-whiteframe="2" class="br2 pa3 mb4">
+
+           <h3 class="f3 mb2" md-colors="::{ color: 'accent'}">Please submit Azure Tenant ID,Client ID,Client Secret key and Subscription ID</h3></div>
+			</div>
+		<h3>Access</h3>
+		<div layout="row" layout-wrap>
+			<label class="input-container" layout="column" flex="noshrink">
+				<span>Azure Tenant Id:</span>
+				<md-input-container md-no-float>
+					<input  type="text"
+						autocomplete="off"
+						class="text-input"
+						ng-model="$ctrl.accountDetails.AZURE_tenant_id"
+						name="AZURE_tenant_id"
+						minlength="2"
+						maxlength="100"
+						md-maxlength="100"
+						required
+						aria-label="Application Name"
+						placeholder="Tenant ID">
+					<span class="hint">Directory ID of the Azure Active Directory</span>
+					<div ng-messages="$ctrl.form.api_key.$error">
+						<div ng-message="required">This is required!</div>
+
+						<div ng-message="md-maxlength">That's too long!</div>
+						<div ng-message="minlength">That's too short!</div>
+					</div>
+				</md-input-container>
+			</label>
+			<label class="input-container" layout="column" flex="noshrink">
+				<span>Azure Client ID</span>
+				<md-input-container md-no-float>
+					<input  type="text"
+						autocomplete="off"
+						class="text-input"
+						ng-model="$ctrl.accountDetails.AZURE_client_id"
+						name="AZURE_client_id"
+						minlength="2"
+						maxlength="100"
+						md-maxlength="100"
+						required
+						aria-label="Application Name"
+						placeholder="Azure client ID">
+					<span class="hint">Client ID is found as Application ID in Azure Active Directory settings.</span>
+					<div ng-messages="$ctrl.form.team_url.$error">
+						<div ng-message="required">This is required!</div>
+						<div ng-message="md-maxlength">That's too long!</div>
+						<div ng-message="minlength">That's too short!</div>
+					</div>
+				</md-input-container>
+			</label>
+					<label class="input-container" layout="column" flex="noshrink">
+				<span>Azure Client Secret ID</span>
+				<md-input-container md-no-float>
+					<input  type="text"
+						autocomplete="off"
+						class="text-input"
+						ng-model="$ctrl.accountDetails.AZURE_client_secret"
+						name="AZURE_client_secret"
+						minlength="2"
+						maxlength="100"
+						md-maxlength="100"
+						required
+						aria-label="Application Name"
+						placeholder="Azure client secret ID">
+					<span class="hint">This is found as key which has to be generated</span>
+					<div ng-messages="$ctrl.form.team_url.$error">
+						<div ng-message="required">This is required!</div>
+						<div ng-message="md-maxlength">That's too long!</div>
+						<div ng-message="minlength">That's too short!</div>
+					</div>
+				</md-input-container>
+			</label>
+						<label class="input-container" layout="column" flex="noshrink">
+				<span>Azure Subscription Id:</span>
+				<md-input-container md-no-float>
+					<input  type="text"
+						autocomplete="off"
+						class="text-input"
+						ng-model="$ctrl.accountDetails.AZURE_subscription_id"
+						name="AZURE_subscription_id"
+						minlength="2"
+						maxlength="100"
+						md-maxlength="100"
+						required
+						aria-label="Application Name"
+						placeholder="Azure Subscription ID">
+					<span class="hint">Azure Subscription ID of your account</span>
+					<div ng-messages="$ctrl.form.api_key.$error">
+						<div ng-message="required">This is required!</div>
+
+						<div ng-message="md-maxlength">That's too long!</div>
+						<div ng-message="minlength">That's too short!</div>
+					</div>
+				</md-input-container>
+
+		</div>
+		<div layout="row" layout-align="end center">
+			<md-button  class="md-raised md-primary" ng-disabled="$ctrl.isDisabled"  type="submit">
+				Submit
+			</md-button>
+		</div>
+
+	</div>
+
+</form>
+</div>
+
+<!--<div class="layout-container">-->
+	<!--<div class= 'form-group pa4 mb4' md-whiteframe="1">-->
+		<!--<h3>Notification Setting Instruction</h3>-->
+
+		<!--<p>{{$ctrl.accountDetails.callback}}</p>-->
+
+		<!--<p> Use this url in "callback url" field in settings > Dispatch'r > New Rule. Please select "ticket_id" parameter-->
+			<!--for "Yellowant Workflows" to work correctly.-->
+		<!--</p>-->
+		<!--<div layout="row" layout-align="end center"  >-->
+			<!--<md-button class="md-raised md-primary" ng-click="$ctrl.newUrl()">-->
+				<!--New Url-->
+			<!--</md-button>-->
+		<!--</div>-->
+	<!--</div>-->
+
+
+<!--</div>-->
+
+<!--<div layout="row" class="layout-container" layout-align="end center">-->
+	<!--<md-button class="md-raised md-warn" >Delete This Account</md-button>-->
+<!--</div>-->
+
+<div class="dialog-demo-content layout-container" layout="row" layout-wrap layout-margin layout-align=" space-between center">
+
+	<md-button class="md-raised md-primary" ng-click="$ctrl.goBack()">
+		Back
+	</md-button>
+
+	<md-button class="md-raised md-warn" ng-click="$ctrl.deleteaccount()">
+      Delete This Account
+	</md-button>
+</div>
+</div>

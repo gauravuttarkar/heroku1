@@ -1,0 +1,95 @@
+
+<div class="layout-container">
+  <section class="mb4" layout="column" layout-align="start center">
+    <!--<h1 class="f1 tc">Statuspage</h1>-->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+     <img class="app-logo" src="https://cdn.worldvectorlogo.com/logos/microsoft-azure-2.svg"" />
+    <md-button target="_blank" ng-if="$ctrl.userAccounts" ng-href="create-new-integration/" class="md-accent md-raised" layout="row">
+      <md-icon>add</md-icon> Add Account</md-button>
+  </section>
+  <section layout="column" layout-align="start center">
+    <md-list class="mw7 w-100" ng-if="$ctrl.userAccounts">
+      <md-list-item ng-repeat="account in $ctrl.userAccounts track by $index">
+        <md-card class="w-100 has-hidden-action-buttons">
+          <md-content class="pa3" layout="row" layout-align="space-between center" ng-if="account.app_authenticated">
+            <a class="mb0" ui-sref="accountSettings({ accountId: account.id })">
+              <h3 class="f3 mb2">{{ ::account.handle }}</h3>
+                <div><b>YellowAnt Invoke Name:</b> {{ ::account.user_invoke_name }}</div>
+                <div ng-if="!account.is_valid" class="mw7 w-100">
+                <div md-colors="::{ color: 'accent'}"><b>INTEGRATE</b> this account with AZURE</div>
+                </div>
+            </a>
+            <a ng-if="account.app_authenticated" md-button class="md-primary md-raised hidden-action-buttons" ui-sref="accountSettings({ accountId: account.id })">View</a>
+            <!--<a ng-if="account.app_authenticated" md-button class="md-primary md-raised hidden-action-buttons" ng-click="$ctrl.onDeleteAccount(account)" >Delete</a>-->
+          </md-content>
+          <md-content class="pa3" layout="row" layout-align="space-between center" ng-if="!account.app_authenticated">
+            <div class="mb0">
+              <h3 class="f3 mb2" md-colors="::{ color: 'accent'}">AZURE Account Not Integrated</h3>
+              <div><b>YellowAnt Invoke Name:</b> {{ ::account.user_invoke_name }}</div>
+            </div>
+            <a md-button class="md-accent md-raised hidden-action-buttons" target="_blank" ng-href="create-new-integration/">Integrate</a>
+          </md-content>
+        </md-card>
+      </md-list-item>
+    </md-list>
+    <div ng-if="!$ctrl.userAccounts" class="mw7 w-100">
+      <div class="mb3"><i>
+       Azure is the Microsoft Cloud platform.
+      </i></div>
+      <div layout="row" layout-align="center" class="mb4">
+        <img class="app-logo" src="https://cdn.worldvectorlogo.com/logos/microsoft-azure-2.svg" />
+      </div>
+      <div>
+        Azure integration for YellowAnt allows you to manage your account in the following ways:
+        <ul>
+          <li>Manage your Virtual machines</li>
+          <li>Manage your Resource groups</li>
+
+        </ul>
+      </div>
+    </div>
+  </section>
+</div>
+
+
+<!--<div class="layout-container">-->
+  <!--<section class="mb4" layout="column" layout-align="start center">-->
+    <!--<h1 class="f1 tc">AZURE</h1>-->
+    <!--<md-button target="_blank" ng-if="$ctrl.userAccounts" ng-href="create-new-integration/" class="md-accent md-raised" layout="row">-->
+      <!--Add Account</md-button>-->
+  <!--</section>-->
+
+  <!--<section layout="column" layout-align="start center">-->
+    <!--<md-list class="mw7 w-100" ng-if="$ctrl.userAccounts">-->
+      <!--<md-list-item ng-repeat="account in $ctrl.userAccounts track by $index">-->
+        <!--<md-card class="w-100 has-hidden-action-buttons">-->
+          <!--<md-content class="pa3" layout="row" layout-align="space-between center" ng-if="account.app_authenticated">-->
+            <!--<a class="mb0" ui-sref="accountSettings({ accountId: account.id })">-->
+              <!--<h3 class="f3 mb2">{{ ::account.handle }}</h3>-->
+              <!--<div><b>YellowAnt Invoke Name:</b> {{ ::account.user_invoke_name }}</div>-->
+              <!--<div ng-if="!account.is_valid" class="mw7 w-100">-->
+               <!--<div md-colors="::{ color: 'accent'}"><b>INTEGRATE</b> this account with AZURE</div>-->
+               <!--</div>-->
+
+            <!--</a>-->
+
+            <!--&lt;!&ndash;<a ng-if="account.app_authenticated" md-button class="md-primary md-raised hidden-action-buttons" ng-click="$ctrl.onDeleteAccount(account)">Delete</a>&ndash;&gt;-->
+            <!--<a ng-if="account.app_authenticated" md-button class="md-primary md-raised hidden-action-buttons" ui-sref="accountSettings({accountId: account.id})">View</a>-->
+          <!--</md-content>-->
+          <!--&lt;!&ndash;<md-content class="pa3" layout="row" layout-align="space-between center" ng-if="!account.app_authenticated">&ndash;&gt;-->
+            <!--&lt;!&ndash;<div class="mb0">&ndash;&gt;-->
+              <!--&lt;!&ndash;<h3 class="f3 mb2" md-colors="::{ color: 'accent'}">Awsec2 Account Not Integrated</h3>&ndash;&gt;-->
+
+              <!--&lt;!&ndash;<div><b>YellowAnt Invoke Name:</b> {{ ::account.user_invoke_name }}</div>&ndash;&gt;-->
+            <!--&lt;!&ndash;</div>&ndash;&gt;-->
+            <!--&lt;!&ndash;<a ng-if="!account.app_authenticated" md-button class="md-primary md-raised hidden-action-buttons" ng-click="$ctrl.onDeleteAccount(account)">Delete</a>&ndash;&gt;-->
+
+            <!--&lt;!&ndash;<a md-button class="md-accent md-raised hidden-action-buttons" target="_blank" ng-href="{{'integrate_app/?id=' + account.id }}">Integrate</a>&ndash;&gt;-->
+          <!--&lt;!&ndash;</md-content>&ndash;&gt;-->
+        <!--</md-card>-->
+      <!--</md-list-item>-->
+    <!--</md-list>-->
+
+  <!--</section>-->
+
+<!--</div>-->
