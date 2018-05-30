@@ -1,5 +1,5 @@
 """
-WSGI config for yellowant_todoapp project.
+WSGI config for yellowant_azurevm project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 

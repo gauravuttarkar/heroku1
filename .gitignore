@@ -7,7 +7,7 @@ virtual-machines-python-manage/*
 web/static/node_modules/*
 */node_modules/*
 .idea/*
-*/migrations/*
+
 
 
 # Byte-compiled / optimized / DLL files
