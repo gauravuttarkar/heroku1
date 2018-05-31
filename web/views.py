@@ -28,7 +28,7 @@ def index(request, path):
         user_integrations = UserIntegration.objects.filter(user=request.user)
         print(user_integrations)
         for user_integration in user_integrations:
-            print(user_integration," inside for loop")
+            print(user_integration, " inside for loop")
             context["user_integrations"].append(user_integration)
     print("returning from index")
     return render(request, "home.html", context)

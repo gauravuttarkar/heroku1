@@ -169,11 +169,11 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
-#STATIC_URL = '/static/'
+STATIC_URL = '/static/'
 
 LOGIN_REDIRECT_URL = 'home'
 LOGOUT_REDIRECT_URL = 'home'
 
-PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
-STATIC_URL = ('web/static/')
-STATIC_ROOT = os.path.join(PROJECT_DIR, 'web/static/')
+# PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
+# STATIC_URL = ('web/static/')
+# STATIC_ROOT = os.path.join(PROJECT_DIR, 'web/static/')
