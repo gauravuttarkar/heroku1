@@ -5,9 +5,6 @@ tests/*
 unmanaged-disks/*
 virtual-machines-python-manage/*
 web/static/node_modules/*
-*/node_modules/*
-.idea/*
-
 
 
 # Byte-compiled / optimized / DLL files
