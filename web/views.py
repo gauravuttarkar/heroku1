@@ -23,13 +23,14 @@ def index(request, path):
     context = {
         "user_integrations": []
     }
-
+    print("Inside index")
     if request.user.is_authenticated:
         user_integrations = UserIntegration.objects.filter(user=request.user)
-        #print(user_integration)
+        print(user_integration)
         for user_integration in user_integrations:
+            print(user_integration," inside for loop")
             context["user_integrations"].append(user_integration)
-    #print("test2")
+    print("returning from index")
     return render(request, "home.html", context)
 
 def userdetails(request):
@@ -40,10 +41,10 @@ def userdetails(request):
     if request.user.is_authenticated:
 
         user_integrations = UserIntegration.objects.filter(user=request.user)
-
+        print('Got user integrations from userdetails function')
         for user_integration in user_integrations:
-            #print (user_integration.yellowant_integration_invoke_name)
-            #print (user_integration.id)
+            print (user_integration.yellowant_integration_invoke_name)
+            print (user_integration.id)
 
             try:
                 smut = azure.objects.get(user_integration_id=user_integration.id)
@@ -54,12 +55,12 @@ def userdetails(request):
             except: #user_integration.DoesNotExist:
                 user_integrations_list.append({"user_invoke_name": user_integration.yellowant_integration_invoke_name,
                                                "id": user_integration.id, "app_authenticated":False})
-    #print(user_integrations_list)
+    print("User integration list",user_integrations_list)
     return HttpResponse(json.dumps(user_integrations_list), content_type="application/json")
 
 def delete_integration(request, id=None):
     """Function to delete an integration."""
-    #print("In delete_integration")
+    print("In delete_integration")
     #print(id)
     access_token_dict = UserIntegration.objects.get(id=id)
     access_token = access_token_dict.yellowant_integration_token
@@ -77,12 +78,12 @@ def view_integration(request, id=None):
     """
     Function to View an integration when it is clicked.
     """
-    #print("In view_integration")
+    print("In view_integration")
     #print(id)
     access_token_dict = UserIntegration.objects.get(id=id)
     access_token = access_token_dict.yellowant_integration_token
     user_integration_id = access_token_dict.yellowant_integration_id
-    #print(user_integration_id)
+    print(user_integration_id)
     url = "https://api.yellowant.com/api/user/integration/%s" % (user_integration_id)
     yellowant_user = YellowAnt(access_token=access_token)
     yellowant_user.delete_user_integration(id=user_integration_id)
