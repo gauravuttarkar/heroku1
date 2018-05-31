@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {% block title %}Home{% endblock %}
+{% load static %}
 <base href="/">
 {% block content %}
 
@@ -43,7 +44,6 @@
   <p>You are not logged in</p>
   <a href="{% url 'login' %}">login</a>
 {% endif %} {% endcomment %}
-
 <div ng-app="azure-app"><yellowant-azure-app></yellowant-azure-app>
   <script src="https://s3.amazonaws.com/ya-stage-common/angular-static/angular.js/1.6.4/angular.min.js"></script>
 
@@ -60,8 +60,8 @@
 
 
 
-  <script src="http://localhost:3011/bundle/main.js"></script>
-
+  <!--<script src="http://localhost:3011/bundle/main.js"></script>-->
+    <script src="{% static "dist/main.js" %}"></script>
 </div>
 
 

@@ -15,7 +15,7 @@ import os
 
 class CreateVMThread(Thread):
     """Creates a VM using a separate thread."""
-    def __init__(self,args,user_integration):
+    def __init__(self, args, user_integration):
         ''' Constructor. '''
         Thread.__init__(self)
         self.args = args
@@ -36,7 +36,7 @@ class CreateVMThread(Thread):
         USERNAME = self.args.get("username")
         PASSWORD = self.args.get("password")
         VNET_NAME = self.args.get("vnet_name")
-        SUBNET_NAME =self.args.get("subnet_name")
+        SUBNET_NAME = self.args.get("subnet_name")
         LOCATION = self.args.get("location")
 
         try:
@@ -49,7 +49,8 @@ class CreateVMThread(Thread):
 
             # Create Linux VM
             print('\nCreating Linux Virtual Machine')
-            vm_parameters = create_vm_parameters(nic.id, VM_REFERENCE['linux'], VM_NAME, USERNAME, PASSWORD,LOCATION)
+            vm_parameters = create_vm_parameters(nic.id, VM_REFERENCE['linux'], VM_NAME,
+                                                 USERNAME, PASSWORD,LOCATION)
             async_vm_creation = compute_client.virtual_machines.create_or_update(
                 GROUP_NAME, VM_NAME, vm_parameters)
             # async_vm_creation.wait()

@@ -8,8 +8,8 @@ module.exports = function () {
     plugins: [
       new S3Plugin({
         s3Options: {
-          accessKeyId: "AKIAIED2fdN5WDHUCZA",
-          secretAccessKey: "F2wvLqVy2u0qxc6kqZcgAAzII+BJLgAV6k/7u",
+          accessKeyId: "AKIAIED2asdfasdN5WDHUCZA",
+          secretAccessKey: "F2wvLqVy2u0sdafdsfc6kqZcgAAzII+BJLgAV6k/7u",
         },
         s3UploadOptions: {
           Bucket: 'ya-manik'

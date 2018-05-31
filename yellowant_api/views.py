@@ -3,12 +3,14 @@ Business logic for different functions used.
 """
 import json
 import uuid
+from azure.common.credentials import ServicePrincipalCredentials
+from yellowant import YellowAnt
 from django.http import HttpResponseRedirect, HttpResponse, HttpResponseNotAllowed
 from django.contrib.auth.models import User
 from django.conf import settings
-from azure.common.credentials import ServicePrincipalCredentials
 
-from yellowant import YellowAnt
+
+
 
 from yellowant_command_center.command_center import CommandCenter
 from yellowant_command_center import commands
