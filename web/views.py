@@ -26,7 +26,7 @@ def index(request, path):
     print("Inside index")
     if request.user.is_authenticated:
         user_integrations = UserIntegration.objects.filter(user=request.user)
-        print(user_integration)
+        print(user_integrations)
         for user_integration in user_integrations:
             print(user_integration," inside for loop")
             context["user_integrations"].append(user_integration)
