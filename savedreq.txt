@@ -93,7 +93,7 @@ cffi==1.11.5
 chardet==3.0.4
 click==6.7
 colorama==0.3.7
-cryptography==2.2.2
+cryptography==3.2
 dj-database-url==0.5.0
 -e git+https://github.com/django/django.git@40ff93310f03dc89a6281a846b1a1ec4cb672bd0#egg=Django
 docutils==0.14
