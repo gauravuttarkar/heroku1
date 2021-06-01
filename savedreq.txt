@@ -128,7 +128,7 @@ rsa==3.4.2
 s3transfer==0.1.13
 six==1.11.0
 socketIO-client==0.7.2
-urllib3==1.22
+urllib3==1.26.5
 websocket-client==0.47.0
 wrapt==1.10.11
 yellowant==0.0.27
