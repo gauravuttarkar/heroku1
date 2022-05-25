@@ -33,7 +33,7 @@ psycopg2-binary==2.7.4
 pyaml==17.12.1
 pyasn1==0.4.2
 pycparser==2.18
-PyJWT==1.6.3
+PyJWT==2.4.0
 pylint==1.9.1
 pylint-django==0.11.1
 pylint-plugin-utils==0.2.6
