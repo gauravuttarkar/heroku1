@@ -88,7 +88,7 @@ azure-servicebus==0.21.1
 azure-servicefabric==6.2.0.0
 azure-servicemanagement-legacy==0.20.7
 botocore==1.8.44
-certifi==2018.4.16
+certifi==2022.12.7
 cffi==1.11.5
 chardet==3.0.4
 click==6.7
